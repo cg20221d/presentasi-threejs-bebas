@@ -16,20 +16,44 @@
       renderer.setSize( window.innerWidth, window.innerHeight );
       document.body.appendChild( renderer.domElement );
 
+      const light = new THREE.AmbientLight( 0x404040 ); // soft white light
+      scene.add( light );
+
+      const directionalLight = new THREE.DirectionalLight( 0xffffff, 1 );
+      scene.add( directionalLight );
+
+      // Generate point dengan persamaan parametrik
+      // x = 10 * sin(t/5) + 5
+      // y = 2 * (t-5)
       const points = [];
+
+      // dilakukan looping untuk mendapatkan x dan y dari t = 0 sampai t = 15
       for ( let t = 0; t < 15; t ++ ) {
         points.push( new THREE.Vector2( 10 * Math.sin( t * 0.2 ) + 5, 2 * ( t - 5 )));
       }
-      const geometry = new THREE.LatheGeometry( points, 32);
-      const material = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
+
+      const segment = 12
+      const phiStart = 0
+      const phiLength = 2 * Math.PI
+      const geometry = new THREE.LatheGeometry(
+        points,     // List dari vertex
+        segment,    // segment
+        phiStart,   // angle mulainya rotasi
+        phiLength,  // besaran rotasi
+      );
+      const material = new THREE.MeshPhongMaterial( { color: 0xffff00, side: THREE.DoubleSide } );
       const lathe = new THREE.Mesh( geometry, material );
       scene.add( lathe );
 
       camera.position.z = 50;
       camera.position.y = 20;
 
+      // lathe.rotation.x = Math.PI / 4
+
       function animate() {
         lathe.rotation.y += 0.01;
+        // lathe.rotation.x += 0.01;
+        // lathe.rotation.z += 0.01;
         requestAnimationFrame( animate );
         renderer.render( scene, camera );
       }
