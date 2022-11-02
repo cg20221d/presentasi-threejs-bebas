@@ -11,19 +11,22 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
 const points = [];
-for (var i = 0; i < 10; i++) {
-  const randomX = -2.5 + Math.round(Math.random() * 5);
-  const randomY = -2.5 + Math.round(Math.random() * 5);
-  const randomZ = -2.5 + Math.round(Math.random() * 5);
+for (let i = 0; i < 20; i++) {
+  const randomX = -2 + Math.round(Math.random() * 4);
+  const randomY = -2 + Math.round(Math.random() * 4);
+  const randomZ = -2 + Math.round(Math.random() * 4);
   points.push(new THREE.Vector3(randomX, randomY, randomZ));
 }
-console.log(points);
+
 const geometry = new THREE.ConvexGeometry(points);
-const material = new THREE.MeshBasicMaterial({ color: 0x0000ff });
+const material = new THREE.MeshPhongMaterial({ color: 0x00aaff });
 const mesh = new THREE.Mesh(geometry, material);
 
-scene.add(mesh);
+const light = new THREE.PointLight(0xffffff, 1);
+light.position.set(0, 0, 10);
 
+scene.add(light);
+scene.add(mesh);
 camera.position.z = 5;
 
 function animate() {
@@ -31,6 +34,7 @@ function animate() {
 
   mesh.rotation.x += 0.01;
   mesh.rotation.y += 0.01;
+  mesh.rotation.z += 0.01;
 
   renderer.render(scene, camera);
 }
